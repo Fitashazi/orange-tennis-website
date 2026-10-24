@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orange — Demo Menü</title>
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    body {
+      background: var(--black);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    .hub { max-width: 880px; width: 100%; }
+
+    .hub-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .hub-header .mark {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin: 0 auto 20px;
+      box-shadow: 0 12px 32px rgba(255,92,0,0.4);
+    }
+    .hub-header h1 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 400;
+      margin-bottom: 10px;
+    }
+    .hub-header h1 em { font-style: italic; color: var(--orange-light); }
+    .hub-header p { color: rgba(255,255,255,0.5); font-size: 0.95rem; max-width: 480px; margin: 0 auto; line-height: 1.6; }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .cards a {
+      display: block;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 28px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .cards a::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,92,0,0.15) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .cards a:hover {
+      border-color: rgba(255,92,0,0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 48px rgba(0,0,0,0.3);
+    }
+    .cards a:hover::before { opacity: 1; }
+    .cards .num {
+      font-family: var(--serif);
+      font-size: 2.5rem;
+      color: rgba(255,92,0,0.3);
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+    .cards h2 {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      margin-bottom: 8px;
+      position: relative;
+    }
+    .cards p {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.5;
+      position: relative;
+    }
+    .cards .arrow {
+      margin-top: 16px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--orange-light);
+      position: relative;
+    }
+
+    .tip {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.35);
+      line-height: 1.6;
+    }
+    .tip strong { color: var(--orange-light); }
+  </style>
+</head>
+<body>
+  <div class="hub">
+    <div class="hub-header">
+      <div class="mark">O</div>
+      <h1>Orange <em>Tennis Club</em></h1>
+      <p>Toplantıda göstermek için hazırlanan tasarım önizlemeleri. Nihai marka onayı sonrası özelleştirilir.</p>
+    </div>
+
+    <div class="cards">
+      <a href="homepage.html">
+        <div class="num">01</div>
+        <h2>Ana Sayfa</h2>
+        <p>Premium kulüp sitesi — açılış, kortlar, üyelik, dijital platform.</p>
+        <div class="arrow">Görüntüle →</div>
+      </a>
+      <a href="booking.html">
+        <div class="num">02</div>
+        <h2>Rezervasyon</h2>
+        <p>Üyelerin kort seçip saat ayıracağı ekran — mobil uyumlu.</p>
+        <div class="arrow">Görüntüle →</div>
+      </a>
+      <a href="membership.html">
+        <div class="num">03</div>
+        <h2>Kurucu Üye</h2>
+        <p>Açılıştan önce üye toplama — bütçe dostu ilk adım.</p>
+        <div class="arrow">Görüntüle →</div>
+      </a>
+    </div>
+
+    <p class="tip">
+      <strong>Toplantı ipucu:</strong> Doğrudan <em>homepage.html</em> açın — en etkileyici sayfa.<br />
+      Telefondan göstermek için: Mac'te sunucu çalıştırın → Android Chrome'da IP:8080
+    </p>
+  </div>
+</body>
+</html>

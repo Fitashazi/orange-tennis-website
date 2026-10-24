@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yönetim — Orange Tennis</title>
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    body { background: #F4F4F2; min-height: 100vh; }
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 22px 6%;
+    }
+    .top h1 { font-family: var(--serif); font-weight: 400; font-size: 2rem; }
+    .top p { color: var(--muted); font-size: 0.9rem; }
+    .top-actions { display: flex; gap: 10px; align-items: center; }
+    .top a, .ghost {
+      color: var(--muted);
+      text-decoration: none;
+      background: transparent;
+      border: none;
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .top a:hover, .ghost:hover { color: var(--orange); }
+    main { padding: 0 6% 64px; display: grid; gap: 20px; }
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 22px;
+    }
+    .card h2 { font-family: var(--serif); font-weight: 400; font-size: 1.6rem; margin-bottom: 6px; }
+    .meta { color: var(--muted); font-size: 0.88rem; margin-bottom: 16px; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    th {
+      text-align: left;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    td { padding: 12px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .empty { color: var(--muted); }
+    .actions { display: flex; gap: 8px; }
+    .actions button, .mark button {
+      border: none;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-family: var(--sans);
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .yes { background: var(--orange); color: #fff; }
+    .no { background: #EFEFEF; color: var(--text); }
+    button:disabled { opacity: 0.45; cursor: default; }
+    .mark { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; }
+    .mark label { display: block; font-size: 0.75rem; font-weight: 600; margin-bottom: 6px; }
+    select {
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      font-family: var(--sans);
+      background: #fff;
+      min-width: 140px;
+    }
+    .notice {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: var(--orange-soft);
+      color: var(--orange-dark);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-strip">Yönetim · Orange Tennis Club</div>
+  <header class="top">
+    <div>
+      <h1>Yönetim</h1>
+      <p>Rezervasyonlar ve ön kayıt.</p>
+    </div>
+    <div class="top-actions">
+      <a href="homepage.html">Site</a>
+      <button class="ghost" id="logout" type="button">Çıkış</button>
+    </div>
+  </header>
+  <main>
+    <section class="card">
+      <h2>Rezervasyonlar</h2>
+      <p class="meta">Kort, gün, saat, ücret ve durum.</p>
+      <div id="bookings"></div>
+    </section>
+    <section class="card">
+      <h2>Ön kayıt başvuruları</h2>
+      <p class="meta" id="count-line">Kurucu üye sayısı: 47 / 100</p>
+      <div id="applications"></div>
+    </section>
+    <section class="card">
+      <h2>Saati dolu işaretle</h2>
+      <p class="meta">Seçilen kort, gün ve saat rezervasyon sayfasında dolu görünür.</p>
+      <form class="mark" id="take-form">
+        <div>
+          <label for="court">Kort</label>
+          <select id="court">
+            <option>Kort 1</option>
+            <option>Kort 2</option>
+            <option>Kort 3</option>
+            <option>Kort 4</option>
+            <option>Kort 5</option>
+          </select>
+        </div>
+        <div>
+          <label for="day">Gün</label>
+          <select id="day">
+            <option>Pzt 23</option>
+            <option>Sal 24</option>
+            <option>Çar 25</option>
+            <option>Per 26</option>
+            <option>Cum 27</option>
+            <option>Cmt 28</option>
+            <option>Paz 29</option>
+          </select>
+        </div>
+        <div>
+          <label for="time">Saat</label>
+          <select id="time">
+            <option>08:00</option>
+            <option>09:30</option>
+            <option>11:00</option>
+            <option>12:30</option>
+            <option>14:00</option>
+            <option>15:30</option>
+            <option>17:00</option>
+            <option>18:30</option>
+            <option>20:00</option>
+            <option>21:30</option>
+          </select>
+        </div>
+        <button class="yes" type="submit">Dolu işaretle</button>
+      </form>
+      <p class="notice" id="take-notice" hidden></p>
+    </section>
+  </main>
+  <script>
+    const STATUS = { pending: "Bekliyor", confirmed: "Onaylandı", cancelled: "İptal" };
+
+    function esc(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (ch) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      }[ch]));
+    }
+
+    async function load() {
+      const res = await fetch("/api/admin");
+      if (res.status === 401) {
+        window.location.href = "/login";
+        return;
+      }
+      if (res.status === 403) {
+        window.location.href = "/hesap";
+        return;
+      }
+      const data = await res.json();
+      document.getElementById("count-line").textContent =
+        "Kurucu üye sayısı: " + data.count + " / 100";
+      renderBookings(data.bookings || []);
+      renderApplications(data.applications || []);
+    }
+
+    function renderBookings(rows) {
+      const host = document.getElementById("bookings");
+      if (!rows.length) {
+        host.innerHTML = '<p class="empty">Henüz rezervasyon yok.</p>';
+        return;
+      }
+      const body = [...rows].reverse().map((row) => `
+        <tr>
+          <td>${esc(row.memberName || "—")}</td>
+          <td>${esc(row.court)}</td>
+          <td>${esc(row.day)}</td>
+          <td>${esc(row.time)}</td>
+          <td>${esc(row.price)} ₺</td>
+          <td>${esc(STATUS[row.status] || row.status)}</td>
+          <td>
+            <div class="actions">
+              <button class="yes" type="button" data-id="${esc(row.id)}" data-status="confirmed" ${row.status === "confirmed" ? "disabled" : ""}>Onayla</button>
+              <button class="no" type="button" data-id="${esc(row.id)}" data-status="cancelled" ${row.status === "cancelled" ? "disabled" : ""}>İptal</button>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+      host.innerHTML = `
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Üye</th><th>Kort</th><th>Gün</th><th>Saat</th><th>Ücret</th><th>Durum</th><th></th></tr></thead>
+            <tbody>${body}</tbody>
+          </table>
+        </div>`;
+      host.querySelectorAll("button[data-id]").forEach((button) => {
+        button.addEventListener("click", () => setStatus(button.dataset.id, button.dataset.status));
+      });
+    }
+
+    function renderApplications(rows) {
+      const host = document.getElementById("applications");
+      if (!rows.length) {
+        host.innerHTML = '<p class="empty">Henüz başvuru yok.</p>';
+        return;
+      }
+      const body = [...rows].reverse().map((row) => `
+        <tr>
+          <td>${esc(row.ad)}</td>
+          <td>${esc(row.soyad)}</td>
+          <td>${esc(row.telefon)}</td>
+          <td>${esc(row.eposta)}</td>
+          <td>${esc(row.paket)}</td>
+          <td>${esc(row.seviye)}</td>
+        </tr>
+      `).join("");
+      host.innerHTML = `
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Ad</th><th>Soyad</th><th>Telefon</th><th>E-posta</th><th>Paket</th><th>Tenis seviyesi</th></tr></thead>
+            <tbody>${body}</tbody>
+          </table>
+        </div>`;
+    }
+
+    async function setStatus(id, status) {
+      const res = await fetch("/api/bookings/status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, status })
+      });
+      if (res.status === 401) {
+        window.location.href = "/login";
+        return;
+      }
+      await load();
+    }
+
+    document.getElementById("take-form").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const notice = document.getElementById("take-notice");
+      const court = document.getElementById("court").value;
+      const day = document.getElementById("day").value;
+      const time = document.getElementById("time").value;
+      const res = await fetch("/api/slots/taken", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ court, day, time })
+      });
+      if (res.status === 401) {
+        window.location.href = "/login";
+        return;
+      }
+      const data = await res.json();
+      notice.hidden = false;
+      notice.textContent = res.ok
+        ? (data.already ? "Bu saat zaten dolu işaretli." : court + " · " + day + " · " + time + " dolu işaretlendi.")
+        : (data.error || "Kaydedilemedi.");
+    });
+
+    document.getElementById("logout").addEventListener("click", async () => {
+      await fetch("/api/logout", { method: "POST" });
+      window.location.href = "/homepage.html";
+    });
+
+    load();
+  </script>
+</body>
+</html>

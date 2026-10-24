@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kurucu Üye — Orange Tennis</title>
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    body { min-height: 100vh; }
+
+    .hero-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: calc(100vh - 36px);
+    }
+
+    .hero-left {
+      position: relative;
+      padding: 48px 6%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: var(--black);
+      color: #fff;
+      overflow: hidden;
+    }
+    .hero-left::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url("images/hero.jpg") center/cover;
+      opacity: 0.35;
+    }
+    .hero-left::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(12,12,12,0.9) 0%, rgba(196,62,0,0.4) 100%);
+    }
+    .hero-left > * { position: relative; z-index: 1; }
+
+    .back {
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      margin-bottom: 40px;
+      display: inline-block;
+    }
+    .back:hover { color: var(--orange-light); }
+    .member-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+    .member-top .back { margin-bottom: 0; }
+
+    .hero-left h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.4rem, 4vw, 3.6rem);
+      font-weight: 400;
+      line-height: 1.08;
+      margin-bottom: 20px;
+    }
+    .hero-left h1 em { font-style: italic; color: var(--orange-light); }
+    .hero-left > p {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.65;
+      max-width: 420px;
+      margin-bottom: 36px;
+    }
+
+    .perks { list-style: none; margin-bottom: 40px; }
+    .perks li {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 0;
+      font-size: 0.95rem;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .perks li::before {
+      content: "✓";
+      width: 28px;
+      height: 28px;
+      background: rgba(255,92,0,0.2);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 0.75rem;
+      color: var(--orange-light);
+      flex-shrink: 0;
+    }
+
+    .progress-box {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 24px;
+      max-width: 360px;
+    }
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 12px;
+    }
+    .progress-top strong {
+      font-family: var(--serif);
+      font-size: 2rem;
+      color: var(--orange-light);
+    }
+    .progress-top span { font-size: 0.82rem; opacity: 0.6; }
+    .progress-bar {
+      height: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 47%;
+      background: linear-gradient(90deg, var(--orange) 0%, var(--orange-light) 100%);
+      border-radius: 999px;
+    }
+    .progress-note { font-size: 0.78rem; opacity: 0.5; margin-top: 10px; }
+
+    .hero-right {
+      background: var(--surface);
+      padding: 48px 6%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .form-wrap {
+      width: 100%;
+      max-width: 440px;
+    }
+    .form-wrap h2 {
+      font-family: var(--serif);
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+    .form-wrap .sub {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      margin-bottom: 8px;
+      margin-top: 18px;
+    }
+    input, select {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      background: var(--white);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--orange);
+      box-shadow: 0 0 0 4px rgba(255,92,0,0.1);
+    }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .submit {
+      width: 100%;
+      margin-top: 28px;
+      padding: 18px;
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      font-family: var(--sans);
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 28px rgba(255,92,0,0.35);
+      transition: transform 0.2s;
+    }
+    .submit:hover { transform: translateY(-2px); }
+
+    .kvkk {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 16px;
+      line-height: 1.5;
+    }
+    .notice {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: var(--orange-soft);
+      color: var(--orange-dark);
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 900px) {
+      .hero-split { grid-template-columns: 1fr; }
+      .hero-left { min-height: auto; padding: 40px 6%; }
+      .hero-right { padding: 40px 6% 60px; }
+      .row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-strip">Kurucu üye demo · Açılıştan önce üye toplama</div>
+
+  <div class="hero-split">
+    <div class="hero-left">
+      <div class="member-top">
+        <a href="homepage.html" class="back">← Ana sayfa</a>
+        <div class="account-nav" id="account-nav" data-tone="light">
+          <a href="/login" class="btn btn-outline-light btn-sm">Giriş</a>
+          <a href="/kayit" class="btn btn-primary btn-sm">Kayıt ol</a>
+        </div>
+      </div>
+      <h1>Orange'a <em>kurucu üye</em> olun</h1>
+      <p>Açılıştan önce kayıt olan ilk 100 üyeye %20 indirim, öncelikli rezervasyon ve ücretsiz tanışma dersi.</p>
+      <ul class="perks">
+        <li>%20 kurucu üye indirimi — ömür boyu</li>
+        <li>Açılış haftası öncelikli kort erişimi</li>
+        <li>1 saat ücretsiz antrenör tanışma dersi</li>
+        <li>Turnuva ve etkinlik erken davet</li>
+      </ul>
+      <div class="progress-box">
+        <div class="progress-top">
+          <strong id="founding-count">47</strong>
+          <span>/ 100 kontenjan</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="founding-bar"></div></div>
+        <div class="progress-note" id="founding-left">53 kurucu üye kontenjanı kaldı</div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="form-wrap">
+        <h2>Ön kayıt</h2>
+        <p class="sub">Bilgilerinizi bırakın — 24 saat içinde sizi arayalım.</p>
+        <form id="uyelik-form" method="post" action="#">
+          <div class="row">
+            <div><label for="ad">Ad</label><input id="ad" name="ad" type="text" placeholder="Ahmet" required /></div>
+            <div><label for="soyad">Soyad</label><input id="soyad" name="soyad" type="text" placeholder="Yılmaz" required /></div>
+          </div>
+          <label for="telefon">Telefon</label>
+          <input id="telefon" name="telefon" type="tel" placeholder="05XX XXX XX XX" required />
+          <label for="eposta">E-posta</label>
+          <input id="eposta" name="eposta" type="email" placeholder="ornek@email.com" required />
+          <label for="paket">Paket</label>
+          <select id="paket" name="paket">
+            <option>Bireysel — 2.400 ₺/ay</option>
+            <option>Aile — 3.800 ₺/ay</option>
+            <option>Kurumsal — Teklif alın</option>
+            <option>Henüz emin değilim</option>
+          </select>
+          <label for="seviye">Tenis seviyesi</label>
+          <select id="seviye" name="seviye">
+            <option>Başlangıç</option>
+            <option>Orta</option>
+            <option>İleri</option>
+            <option>Turnuva / Profesyonel</option>
+          </select>
+          <button type="submit" class="submit">Kurucu Üye Başvurusu Gönder →</button>
+          <p class="notice" id="uyelik-notice" hidden></p>
+          <p class="kvkk">Göndererek KVKK aydınlatma metnini okuduğunuzu kabul edersiniz.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    function applyCount(count) {
+      document.getElementById("founding-count").textContent = String(count);
+      document.getElementById("founding-left").textContent = (100 - count) + " kurucu üye kontenjanı kaldı";
+      document.getElementById("founding-bar").style.width = count + "%";
+    }
+
+    async function loadCount() {
+      const res = await fetch("/api/founding-count");
+      if (!res.ok) return;
+      const data = await res.json();
+      applyCount(data.count);
+    }
+
+    const form = document.getElementById("uyelik-form");
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const notice = document.getElementById("uyelik-notice");
+      const button = form.querySelector("button");
+      notice.hidden = false;
+      notice.textContent = "Kaydediliyor…";
+      button.disabled = true;
+      try {
+        const res = await fetch("/api/applications", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ad: document.getElementById("ad").value,
+            soyad: document.getElementById("soyad").value,
+            telefon: document.getElementById("telefon").value,
+            eposta: document.getElementById("eposta").value,
+            paket: document.getElementById("paket").value,
+            seviye: document.getElementById("seviye").value
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          notice.textContent = data.error || "Kaydedilemedi.";
+          return;
+        }
+        applyCount(data.count);
+        notice.textContent = "Başvurunuz alındı.";
+        form.reset();
+      } catch (err) {
+        notice.textContent = "Kaydedilemedi. Sayfayı yenileyip tekrar deneyin.";
+      } finally {
+        button.disabled = false;
+      }
+    });
+
+    loadCount();
+  </script>
+  <script src="account.js"></script>
+</body>
+</html>

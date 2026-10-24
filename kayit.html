@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kayıt ol — Orange Tennis</title>
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    body {
+      min-height: 100vh;
+      background: var(--black);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+    main {
+      flex: 1;
+      display: grid;
+      place-items: center;
+      padding: 32px 20px 48px;
+    }
+    .card {
+      width: 100%;
+      max-width: 480px;
+      background: var(--white);
+      color: var(--text);
+      border-radius: 28px;
+      padding: 36px 32px;
+      box-shadow: var(--shadow-lg);
+    }
+    .mark {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+      color: #fff;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+    h1 {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+    }
+    .sub { color: var(--muted); margin-bottom: 24px; line-height: 1.5; }
+    label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin: 14px 0 8px;
+    }
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      font-family: var(--sans);
+      font-size: 1rem;
+    }
+    input:focus {
+      outline: none;
+      border-color: var(--orange);
+      box-shadow: 0 0 0 4px rgba(255, 92, 0, 0.12);
+    }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    button {
+      width: 100%;
+      margin-top: 22px;
+      padding: 16px;
+      border: none;
+      border-radius: 999px;
+      background: var(--orange);
+      color: #fff;
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .error {
+      margin-top: 14px;
+      color: var(--orange-dark);
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+    .back {
+      display: inline-block;
+      margin-top: 18px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+    }
+    .back:hover { color: var(--orange); }
+    @media (max-width: 600px) {
+      .row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-strip">Üye kaydı · Orange Tennis Club</div>
+  <main>
+    <form class="card" id="signup-form">
+      <div class="mark">O</div>
+      <h1>Kayıt ol</h1>
+      <p class="sub">Üye hesabı oluşturun. Kort rezervasyonu bu hesapla yapılır.</p>
+      <div class="row">
+        <div>
+          <label for="ad">Ad</label>
+          <input id="ad" name="ad" autocomplete="given-name" required />
+        </div>
+        <div>
+          <label for="soyad">Soyad</label>
+          <input id="soyad" name="soyad" autocomplete="family-name" required />
+        </div>
+      </div>
+      <label for="telefon">Telefon</label>
+      <input id="telefon" name="telefon" type="tel" autocomplete="tel" required />
+      <label for="eposta">E-posta</label>
+      <input id="eposta" name="eposta" type="email" autocomplete="email" required />
+      <label for="password">Şifre</label>
+      <input id="password" name="password" type="password" autocomplete="new-password" required />
+      <button type="submit">Kayıt ol</button>
+      <p class="error" id="signup-error" hidden></p>
+      <a class="back" href="/login">Zaten hesabınız var mı? Giriş</a>
+    </form>
+  </main>
+  <script>
+    const form = document.getElementById("signup-form");
+    const error = document.getElementById("signup-error");
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      error.hidden = true;
+      const button = form.querySelector("button");
+      button.disabled = true;
+      try {
+        const res = await fetch("/api/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ad: document.getElementById("ad").value,
+            soyad: document.getElementById("soyad").value,
+            telefon: document.getElementById("telefon").value,
+            eposta: document.getElementById("eposta").value,
+            password: document.getElementById("password").value
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          error.hidden = false;
+          error.textContent = data.error || "Kayıt olunamadı.";
+          return;
+        }
+        window.location.href = "/hesap";
+      } catch (err) {
+        error.hidden = false;
+        error.textContent = "Kayıt olunamadı. Sayfayı yenileyip tekrar deneyin.";
+      } finally {
+        button.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

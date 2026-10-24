@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hesabım — Orange Tennis</title>
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    body { background: #F4F4F2; min-height: 100vh; }
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 22px 6%;
+    }
+    .top h1 { font-family: var(--serif); font-weight: 400; font-size: 2rem; }
+    .top a { color: var(--muted); text-decoration: none; font-weight: 600; }
+    .top a:hover { color: var(--orange); }
+    main { padding: 0 6% 64px; display: grid; gap: 20px; }
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 22px;
+    }
+    .card h2 { font-family: var(--serif); font-weight: 400; font-size: 1.6rem; margin-bottom: 14px; }
+    .profile { display: grid; gap: 8px; color: var(--text); }
+    .profile span { color: var(--muted); font-size: 0.78rem; font-weight: 600; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+    .ghost {
+      background: transparent;
+      border: 1.5px solid var(--border);
+      border-radius: 999px;
+      padding: 10px 20px;
+      font-family: var(--sans);
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    th {
+      text-align: left;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    td { padding: 12px 10px; border-bottom: 1px solid var(--border); }
+    .empty { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="demo-strip">Hesabım · Orange Tennis Club</div>
+  <header class="top">
+    <div>
+      <h1 id="hello">Hesabım</h1>
+    </div>
+    <a href="homepage.html">Ana sayfa</a>
+  </header>
+  <main>
+    <section class="card">
+      <h2>Bilgiler</h2>
+      <div class="profile" id="profile"></div>
+      <div class="actions">
+        <a class="btn btn-primary btn-sm" href="/booking.html">Kort Rezervasyonu</a>
+        <button class="ghost" id="logout" type="button">Çıkış</button>
+      </div>
+    </section>
+    <section class="card">
+      <h2>Rezervasyonlarım</h2>
+      <div id="bookings"></div>
+    </section>
+  </main>
+  <script>
+    const STATUS = { pending: "Bekliyor", confirmed: "Onaylandı", cancelled: "İptal" };
+
+    function esc(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (ch) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      }[ch]));
+    }
+
+    async function load() {
+      const res = await fetch("/api/account");
+      if (res.status === 401) {
+        window.location.href = "/login";
+        return;
+      }
+      if (res.status === 403) {
+        window.location.href = "/admin";
+        return;
+      }
+      const data = await res.json();
+      document.getElementById("hello").textContent = data.ad + " " + data.soyad;
+      document.getElementById("profile").innerHTML =
+        "<div><span>Ad</span><div>" + esc(data.ad) + " " + esc(data.soyad) + "</div></div>" +
+        "<div><span>E-posta</span><div>" + esc(data.eposta) + "</div></div>" +
+        "<div><span>Telefon</span><div>" + esc(data.telefon) + "</div></div>";
+      const rows = data.bookings || [];
+      const host = document.getElementById("bookings");
+      if (!rows.length) {
+        host.innerHTML = '<p class="empty">Henüz rezervasyonunuz yok.</p>';
+        return;
+      }
+      const body = [...rows].reverse().map((row) =>
+        "<tr><td>" + esc(row.court) + "</td><td>" + esc(row.day) + "</td><td>" + esc(row.time) +
+        "</td><td>" + esc(STATUS[row.status] || row.status) + "</td></tr>"
+      ).join("");
+      host.innerHTML =
+        '<div class="table-wrap"><table><thead><tr><th>Kort</th><th>Gün</th><th>Saat</th><th>Durum</th></tr></thead><tbody>' +
+        body + "</tbody></table></div>";
+    }
+
+    document.getElementById("logout").addEventListener("click", async () => {
+      await fetch("/api/logout", { method: "POST" });
+      window.location.href = "/homepage.html";
+    });
+
+    load();
+  </script>
+</body>
+</html>

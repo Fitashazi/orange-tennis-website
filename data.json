@@ -1,0 +1,588 @@
+{
+  "staff": {
+    "username": "admin",
+    "salt": "17e55f6361cc3af10a3820b2a8840a27",
+    "passwordHash": "d61b300828b99ad87807b66fb97a485ac4a4516dde2a8817a67ef0495ab536df"
+  },
+  "bookings": [
+    {
+      "id": "seed-kort1-pzt-0800",
+      "court": "Kort 1",
+      "day": "Pzt 23",
+      "time": "08:00",
+      "price": 600,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort1-pzt-1100",
+      "court": "Kort 1",
+      "day": "Pzt 23",
+      "time": "11:00",
+      "price": 600,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort1-pzt-1700",
+      "court": "Kort 1",
+      "day": "Pzt 23",
+      "time": "17:00",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort1-sal-0930",
+      "court": "Kort 1",
+      "day": "Sal 24",
+      "time": "09:30",
+      "price": 600,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort1-sal-1530",
+      "court": "Kort 1",
+      "day": "Sal 24",
+      "time": "15:30",
+      "price": 700,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort1-sal-2000",
+      "court": "Kort 1",
+      "day": "Sal 24",
+      "time": "20:00",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort1-çar-1230",
+      "court": "Kort 1",
+      "day": "Çar 25",
+      "time": "12:30",
+      "price": 700,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort1-çar-2130",
+      "court": "Kort 1",
+      "day": "Çar 25",
+      "time": "21:30",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort1-per-1400",
+      "court": "Kort 1",
+      "day": "Per 26",
+      "time": "14:00",
+      "price": 700,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort1-per-1830",
+      "court": "Kort 1",
+      "day": "Per 26",
+      "time": "18:30",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort1-cum-1100",
+      "court": "Kort 1",
+      "day": "Cum 27",
+      "time": "11:00",
+      "price": 600,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort1-cum-1530",
+      "court": "Kort 1",
+      "day": "Cum 27",
+      "time": "15:30",
+      "price": 700,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort1-cmt-0800",
+      "court": "Kort 1",
+      "day": "Cmt 28",
+      "time": "08:00",
+      "price": 600,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort1-cmt-1400",
+      "court": "Kort 1",
+      "day": "Cmt 28",
+      "time": "14:00",
+      "price": 700,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort1-cmt-2130",
+      "court": "Kort 1",
+      "day": "Cmt 28",
+      "time": "21:30",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort1-paz-0930",
+      "court": "Kort 1",
+      "day": "Paz 29",
+      "time": "09:30",
+      "price": 600,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort1-paz-1830",
+      "court": "Kort 1",
+      "day": "Paz 29",
+      "time": "18:30",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort2-pzt-0930",
+      "court": "Kort 2",
+      "day": "Pzt 23",
+      "time": "09:30",
+      "price": 600,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort2-pzt-1400",
+      "court": "Kort 2",
+      "day": "Pzt 23",
+      "time": "14:00",
+      "price": 700,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort2-sal-1100",
+      "court": "Kort 2",
+      "day": "Sal 24",
+      "time": "11:00",
+      "price": 600,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort2-sal-1830",
+      "court": "Kort 2",
+      "day": "Sal 24",
+      "time": "18:30",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort2-çar-0800",
+      "court": "Kort 2",
+      "day": "Çar 25",
+      "time": "08:00",
+      "price": 600,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort2-çar-1530",
+      "court": "Kort 2",
+      "day": "Çar 25",
+      "time": "15:30",
+      "price": 700,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort2-çar-2000",
+      "court": "Kort 2",
+      "day": "Çar 25",
+      "time": "20:00",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort2-per-1230",
+      "court": "Kort 2",
+      "day": "Per 26",
+      "time": "12:30",
+      "price": 700,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort2-per-2130",
+      "court": "Kort 2",
+      "day": "Per 26",
+      "time": "21:30",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort2-cum-1700",
+      "court": "Kort 2",
+      "day": "Cum 27",
+      "time": "17:00",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort2-cmt-0930",
+      "court": "Kort 2",
+      "day": "Cmt 28",
+      "time": "09:30",
+      "price": 600,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort2-cmt-1530",
+      "court": "Kort 2",
+      "day": "Cmt 28",
+      "time": "15:30",
+      "price": 700,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort2-paz-1100",
+      "court": "Kort 2",
+      "day": "Paz 29",
+      "time": "11:00",
+      "price": 600,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort2-paz-2000",
+      "court": "Kort 2",
+      "day": "Paz 29",
+      "time": "20:00",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort3-pzt-1230",
+      "court": "Kort 3",
+      "day": "Pzt 23",
+      "time": "12:30",
+      "price": 700,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort3-pzt-2000",
+      "court": "Kort 3",
+      "day": "Pzt 23",
+      "time": "20:00",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort3-sal-0800",
+      "court": "Kort 3",
+      "day": "Sal 24",
+      "time": "08:00",
+      "price": 600,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort3-sal-2130",
+      "court": "Kort 3",
+      "day": "Sal 24",
+      "time": "21:30",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort3-çar-1100",
+      "court": "Kort 3",
+      "day": "Çar 25",
+      "time": "11:00",
+      "price": 600,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort3-çar-1700",
+      "court": "Kort 3",
+      "day": "Çar 25",
+      "time": "17:00",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort3-per-0930",
+      "court": "Kort 3",
+      "day": "Per 26",
+      "time": "09:30",
+      "price": 600,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort3-per-1530",
+      "court": "Kort 3",
+      "day": "Per 26",
+      "time": "15:30",
+      "price": 700,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort3-cum-1400",
+      "court": "Kort 3",
+      "day": "Cum 27",
+      "time": "14:00",
+      "price": 700,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort3-cum-1830",
+      "court": "Kort 3",
+      "day": "Cum 27",
+      "time": "18:30",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort3-cmt-1100",
+      "court": "Kort 3",
+      "day": "Cmt 28",
+      "time": "11:00",
+      "price": 600,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort3-paz-0800",
+      "court": "Kort 3",
+      "day": "Paz 29",
+      "time": "08:00",
+      "price": 600,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort3-paz-1530",
+      "court": "Kort 3",
+      "day": "Paz 29",
+      "time": "15:30",
+      "price": 700,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort3-paz-2130",
+      "court": "Kort 3",
+      "day": "Paz 29",
+      "time": "21:30",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort4-pzt-1530",
+      "court": "Kort 4",
+      "day": "Pzt 23",
+      "time": "15:30",
+      "price": 700,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort4-pzt-1830",
+      "court": "Kort 4",
+      "day": "Pzt 23",
+      "time": "18:30",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort4-sal-1230",
+      "court": "Kort 4",
+      "day": "Sal 24",
+      "time": "12:30",
+      "price": 700,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort4-sal-1700",
+      "court": "Kort 4",
+      "day": "Sal 24",
+      "time": "17:00",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort4-çar-0930",
+      "court": "Kort 4",
+      "day": "Çar 25",
+      "time": "09:30",
+      "price": 600,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort4-çar-1400",
+      "court": "Kort 4",
+      "day": "Çar 25",
+      "time": "14:00",
+      "price": 700,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort4-per-0800",
+      "court": "Kort 4",
+      "day": "Per 26",
+      "time": "08:00",
+      "price": 600,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort4-per-1100",
+      "court": "Kort 4",
+      "day": "Per 26",
+      "time": "11:00",
+      "price": 600,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort4-per-2000",
+      "court": "Kort 4",
+      "day": "Per 26",
+      "time": "20:00",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort4-cum-2130",
+      "court": "Kort 4",
+      "day": "Cum 27",
+      "time": "21:30",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort4-cmt-1230",
+      "court": "Kort 4",
+      "day": "Cmt 28",
+      "time": "12:30",
+      "price": 700,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort4-cmt-1830",
+      "court": "Kort 4",
+      "day": "Cmt 28",
+      "time": "18:30",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort4-paz-1400",
+      "court": "Kort 4",
+      "day": "Paz 29",
+      "time": "14:00",
+      "price": 700,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort4-paz-1700",
+      "court": "Kort 4",
+      "day": "Paz 29",
+      "time": "17:00",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort5-pzt-2130",
+      "court": "Kort 5",
+      "day": "Pzt 23",
+      "time": "21:30",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort5-sal-1400",
+      "court": "Kort 5",
+      "day": "Sal 24",
+      "time": "14:00",
+      "price": 700,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort5-sal-2000",
+      "court": "Kort 5",
+      "day": "Sal 24",
+      "time": "20:00",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort5-çar-1830",
+      "court": "Kort 5",
+      "day": "Çar 25",
+      "time": "18:30",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort5-per-1700",
+      "court": "Kort 5",
+      "day": "Per 26",
+      "time": "17:00",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort5-per-2130",
+      "court": "Kort 5",
+      "day": "Per 26",
+      "time": "21:30",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort5-cum-0800",
+      "court": "Kort 5",
+      "day": "Cum 27",
+      "time": "08:00",
+      "price": 600,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort5-cum-1230",
+      "court": "Kort 5",
+      "day": "Cum 27",
+      "time": "12:30",
+      "price": 700,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort5-cum-2000",
+      "court": "Kort 5",
+      "day": "Cum 27",
+      "time": "20:00",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort5-cmt-1530",
+      "court": "Kort 5",
+      "day": "Cmt 28",
+      "time": "15:30",
+      "price": 700,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort5-cmt-1700",
+      "court": "Kort 5",
+      "day": "Cmt 28",
+      "time": "17:00",
+      "price": 800,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort5-paz-1100",
+      "court": "Kort 5",
+      "day": "Paz 29",
+      "time": "11:00",
+      "price": 600,
+      "status": "confirmed"
+    },
+    {
+      "id": "seed-kort5-paz-1230",
+      "court": "Kort 5",
+      "day": "Paz 29",
+      "time": "12:30",
+      "price": 700,
+      "status": "confirmed"
+    }
+  ],
+  "applications": [],
+  "takenSlots": [],
+  "members": []
+}

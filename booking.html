@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rezervasyon — Orange Tennis</title>
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    body { background: #F4F4F2; min-height: 100vh; }
+
+    .top {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 6%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .top a { color: var(--muted); text-decoration: none; font-size: 0.88rem; font-weight: 500; }
+    .top a:hover { color: var(--orange); }
+    .top-center { text-align: center; }
+    .top-center h1 { font-family: var(--serif); font-size: 1.25rem; font-weight: 400; }
+    .top-center small { font-size: 0.72rem; color: var(--muted); }
+
+    .shell {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 6% 100px;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .card-head {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .courts { padding: 12px; }
+    .court-opt {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid transparent;
+      border-radius: 16px;
+      background: transparent;
+      cursor: pointer;
+      font-family: var(--sans);
+      text-align: left;
+      transition: all 0.2s;
+      margin-bottom: 4px;
+    }
+    .court-opt:hover { background: var(--orange-soft); }
+    .court-opt.active {
+      background: var(--orange-soft);
+      border-color: var(--orange);
+    }
+    .court-thumb {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      object-fit: cover;
+    }
+    .court-opt strong { display: block; font-size: 0.92rem; font-weight: 600; }
+    .court-opt span { font-size: 0.75rem; color: var(--muted); }
+
+    .summary {
+      margin: 12px;
+      padding: 24px;
+      background: var(--black);
+      border-radius: 20px;
+      color: #fff;
+    }
+    .summary-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.5;
+      margin-bottom: 12px;
+    }
+    .summary-court { font-family: var(--serif); font-size: 1.5rem; margin-bottom: 4px; }
+    .summary-time { font-size: 0.88rem; opacity: 0.7; margin-bottom: 16px; }
+    .summary-price {
+      font-family: var(--serif);
+      font-size: 2.4rem;
+      color: var(--orange-light);
+      margin-bottom: 16px;
+    }
+    .pay-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(255,92,0,0.4);
+      transition: transform 0.2s;
+    }
+    .pay-btn:hover { transform: translateY(-1px); }
+
+    .main-card { padding: 28px; }
+    .date-scroll {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 28px;
+      scrollbar-width: none;
+    }
+    .date-scroll::-webkit-scrollbar { display: none; }
+    .day-btn {
+      flex-shrink: 0;
+      min-width: 64px;
+      padding: 14px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      background: var(--white);
+      cursor: pointer;
+      font-family: var(--sans);
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .day-btn.active {
+      background: var(--black);
+      border-color: var(--black);
+      color: #fff;
+    }
+    .day-btn .d { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.7; }
+    .day-btn .n { font-size: 1.2rem; font-weight: 700; margin-top: 2px; }
+
+    .slots-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 16px;
+    }
+    .slots-header h2 { font-family: var(--serif); font-size: 1.5rem; }
+    .slots-header span { font-size: 0.82rem; color: var(--muted); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+      gap: 10px;
+    }
+    .slot {
+      padding: 16px 8px;
+      border-radius: 14px;
+      border: none;
+      font-family: var(--sans);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .slot.free { background: var(--orange-soft); color: var(--orange-dark); }
+    .slot.free:hover { background: #FFE4D4; transform: scale(1.03); }
+    .slot.busy { background: #EFEFEF; color: #BBB; cursor: not-allowed; }
+    .slot.selected {
+      background: var(--orange);
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(255,92,0,0.35);
+    }
+
+    .legend {
+      display: flex;
+      gap: 20px;
+      margin-top: 24px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .legend i {
+      display: inline-block;
+      width: 12px; height: 12px;
+      border-radius: 4px;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    .notice {
+      margin-bottom: 18px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: var(--orange-soft);
+      color: var(--orange-dark);
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    .mobile-bar {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--black);
+      color: #fff;
+      padding: 16px 20px;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 100;
+      box-shadow: 0 -8px 32px rgba(0,0,0,0.15);
+    }
+    .mobile-bar .price { font-family: var(--serif); font-size: 1.5rem; color: var(--orange-light); }
+    .mobile-bar small { display: block; font-size: 0.72rem; opacity: 0.6; font-family: var(--sans); }
+
+    @media (max-width: 768px) {
+      .shell { grid-template-columns: 1fr; padding-bottom: 120px; }
+      .sidebar-summary { display: none; }
+      .mobile-bar { display: flex; }
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-strip">Rezervasyon demo · Mobilde de aynı deneyim</div>
+
+  <div class="top">
+    <a href="homepage.html">← Geri</a>
+    <div class="top-center">
+      <h1>Rezervasyon</h1>
+      <small>Orange Tennis Club</small>
+    </div>
+    <div class="account-nav" id="account-nav">
+      <a href="/login" class="btn btn-outline btn-sm">Giriş</a>
+      <a href="/kayit" class="btn btn-primary btn-sm">Kayıt ol</a>
+    </div>
+  </div>
+
+  <div class="shell">
+    <aside>
+      <div class="card">
+        <div class="card-head">Kort seçin</div>
+        <div class="courts">
+          <button class="court-opt active" onclick="pickCourt(this,'Kort 1')">
+            <img class="court-thumb" src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=120&q=70" alt="Kort 1" />
+            <div><strong>Kort 1</strong><span>Hard · Açık · LED</span></div>
+          </button>
+          <button class="court-opt" onclick="pickCourt(this,'Kort 2')">
+            <img class="court-thumb" src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=120&q=70" alt="Kort 2" />
+            <div><strong>Kort 2</strong><span>Hard · Açık</span></div>
+          </button>
+          <button class="court-opt" onclick="pickCourt(this,'Kort 3')">
+            <img class="court-thumb" src="https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=120&q=70" alt="Kort 3" />
+            <div><strong>Kort 3</strong><span>Hard · Açık</span></div>
+          </button>
+          <button class="court-opt" onclick="pickCourt(this,'Kort 4')">
+            <img class="court-thumb" src="https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=120&q=70" alt="Kort 4" />
+            <div><strong>Kort 4</strong><span>Clay · Kapalı</span></div>
+          </button>
+          <button class="court-opt" onclick="pickCourt(this,'Kort 5')">
+            <img class="court-thumb" src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=120&q=70" alt="Kort 5" />
+            <div><strong>Kort 5</strong><span>Clay · Kapalı</span></div>
+          </button>
+        </div>
+        <div class="summary sidebar-summary">
+          <div class="summary-label">Seçiminiz</div>
+          <div class="summary-court" id="c-court">Kort 1</div>
+          <div class="summary-time" id="c-time">Saat seçin · 90 dk</div>
+          <div class="summary-price" id="c-price">—</div>
+          <button class="pay-btn" type="button" onclick="pay()">Ödemeye Geç →</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="card main-card">
+      <div class="date-scroll">
+        <button class="day-btn active" type="button" data-day="Pzt 23"><div class="d">Pzt</div><div class="n">23</div></button>
+        <button class="day-btn" type="button" data-day="Sal 24"><div class="d">Sal</div><div class="n">24</div></button>
+        <button class="day-btn" type="button" data-day="Çar 25"><div class="d">Çar</div><div class="n">25</div></button>
+        <button class="day-btn" type="button" data-day="Per 26"><div class="d">Per</div><div class="n">26</div></button>
+        <button class="day-btn" type="button" data-day="Cum 27"><div class="d">Cum</div><div class="n">27</div></button>
+        <button class="day-btn" type="button" data-day="Cmt 28"><div class="d">Cmt</div><div class="n">28</div></button>
+        <button class="day-btn" type="button" data-day="Paz 29"><div class="d">Paz</div><div class="n">29</div></button>
+      </div>
+      <div id="notice" class="notice" hidden></div>
+      <div class="slots-header">
+        <h2>Müsait saatler</h2>
+        <span>Prime time: 800 ₺ · Gündüz: 600 ₺</span>
+      </div>
+      <div class="grid" id="grid"></div>
+      <div class="legend">
+        <span><i style="background:var(--orange-soft)"></i>Müsait</span>
+        <span><i style="background:#EFEFEF"></i>Dolu</span>
+        <span><i style="background:var(--orange)"></i>Seçili</span>
+      </div>
+    </main>
+  </div>
+
+  <div class="mobile-bar">
+    <div>
+      <small id="m-time">Saat seçin</small>
+      <div class="price" id="m-price">—</div>
+    </div>
+    <button class="pay-btn" type="button" style="width:auto;padding:14px 24px;" onclick="pay()">Öde →</button>
+  </div>
+
+  <script>
+    const slots = [
+      { t:"08:00", p:600 }, { t:"09:30", p:600 },
+      { t:"11:00", p:600 }, { t:"12:30", p:700 },
+      { t:"14:00", p:700 }, { t:"15:30", p:700 },
+      { t:"17:00", p:800 }, { t:"18:30", p:800 },
+      { t:"20:00", p:800 }, { t:"21:30", p:800 },
+    ];
+    let sel = null;
+    let blocked = [];
+    let selectedDay = "Pzt 23";
+    let selectedTime = null;
+    let selectedPrice = null;
+    let loadToken = 0;
+    const grid = document.getElementById("grid");
+    const notice = document.getElementById("notice");
+
+    function slotBusy(slot) {
+      const court = document.getElementById("c-court").textContent;
+      return blocked.some((item) => item.court === court && item.day === selectedDay && item.time === slot.t);
+    }
+
+    function render() {
+      grid.innerHTML = slots.map((slot) => {
+        if (slotBusy(slot)) return `<button class="slot busy" type="button">${slot.t}</button>`;
+        return `<button class="slot free" type="button" onclick="pickSlot(this,'${slot.t}',${slot.p})">${slot.t}</button>`;
+      }).join("");
+    }
+
+    function pickCourt(btn, name) {
+      document.querySelectorAll(".court-opt").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById("c-court").textContent = name;
+      clearSelection();
+      refreshBlocked();
+    }
+
+    function pickSlot(btn, time, price) {
+      if (sel) { sel.classList.remove("selected"); sel.classList.add("free"); }
+      btn.classList.remove("free");
+      btn.classList.add("selected");
+      sel = btn;
+      selectedTime = time;
+      selectedPrice = price;
+      const label = selectedDay + " · " + time + " · 90 dk";
+      const priceStr = price + " ₺";
+      document.getElementById("c-time").textContent = label;
+      document.getElementById("c-price").textContent = priceStr;
+      document.getElementById("m-time").textContent = label;
+      document.getElementById("m-price").textContent = priceStr;
+    }
+
+    function clearSelection() {
+      sel = null;
+      selectedTime = null;
+      selectedPrice = null;
+      document.getElementById("c-time").textContent = selectedDay + " · Saat seçin · 90 dk";
+      document.getElementById("c-price").textContent = "—";
+      document.getElementById("m-time").textContent = "Saat seçin";
+      document.getElementById("m-price").textContent = "—";
+    }
+
+    async function refreshBlocked() {
+      const token = ++loadToken;
+      const court = document.getElementById("c-court").textContent;
+      const day = selectedDay;
+      grid.innerHTML = "";
+      try {
+        const params = new URLSearchParams({ court: court, day: day });
+        const res = await fetch("/api/availability?" + params.toString());
+        if (!res.ok || token !== loadToken) return;
+        const data = await res.json();
+        if (token !== loadToken) return;
+        blocked = data.blocked || [];
+        render();
+      } catch (err) {
+        if (token === loadToken) render();
+      }
+    }
+
+    function rememberBooking() {
+      sessionStorage.setItem("orange-booking", JSON.stringify({
+        court: document.getElementById("c-court").textContent,
+        day: selectedDay,
+        time: selectedTime,
+        price: selectedPrice
+      }));
+    }
+
+    async function pay() {
+      notice.hidden = false;
+      if (!selectedTime) {
+        notice.textContent = "Önce bir saat seçin.";
+        return;
+      }
+      const button = document.querySelector(".summary .pay-btn");
+      if (button) button.disabled = true;
+      try {
+        const meRes = await fetch("/api/me");
+        const me = await meRes.json();
+        if (me.role !== "member") {
+          if (!me.role) {
+            rememberBooking();
+            window.location.href = "/login?next=/booking.html";
+            return;
+          }
+          notice.textContent = "Rezervasyon için üye hesabı gerekir.";
+          return;
+        }
+        const res = await fetch("/api/bookings", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            court: document.getElementById("c-court").textContent,
+            day: selectedDay,
+            time: selectedTime,
+            price: selectedPrice
+          })
+        });
+        const data = await res.json();
+        if (res.status === 401) {
+          rememberBooking();
+          window.location.href = "/login?next=/booking.html";
+          return;
+        }
+        if (!res.ok) {
+          notice.textContent = data.error || "Kaydedilemedi.";
+          await refreshBlocked();
+          return;
+        }
+        const saved = data.booking;
+        notice.textContent = "Rezervasyonunuz alındı. Onay bekliyor — " + saved.court + ", " + saved.day + ", " + saved.time + ", " + saved.price + " ₺.";
+        clearSelection();
+        await refreshBlocked();
+      } catch (err) {
+        notice.textContent = "Kaydedilemedi. Sayfayı yenileyip tekrar deneyin.";
+      } finally {
+        if (button) button.disabled = false;
+      }
+    }
+
+    document.querySelectorAll(".day-btn").forEach(d => {
+      d.addEventListener("click", () => {
+        document.querySelectorAll(".day-btn").forEach(x => x.classList.remove("active"));
+        d.classList.add("active");
+        selectedDay = d.dataset.day;
+        clearSelection();
+        refreshBlocked();
+      });
+    });
+
+    async function restorePending() {
+      const raw = sessionStorage.getItem("orange-booking");
+      if (!raw) {
+        await refreshBlocked();
+        return;
+      }
+      let saved = null;
+      try { saved = JSON.parse(raw); } catch (err) { saved = null; }
+      let role = null;
+      try {
+        const me = await fetch("/api/me");
+        role = (await me.json()).role;
+      } catch (err) {
+        role = null;
+      }
+      if (role !== "member" || !saved) {
+        await refreshBlocked();
+        return;
+      }
+      sessionStorage.removeItem("orange-booking");
+      const courtBtn = [...document.querySelectorAll(".court-opt")].find((btn) => {
+        const name = btn.querySelector("strong");
+        return name && name.textContent === saved.court;
+      });
+      if (courtBtn) {
+        document.querySelectorAll(".court-opt").forEach((btn) => btn.classList.remove("active"));
+        courtBtn.classList.add("active");
+        document.getElementById("c-court").textContent = saved.court;
+      }
+      const dayBtn = document.querySelector('.day-btn[data-day="' + saved.day + '"]');
+      if (dayBtn) {
+        document.querySelectorAll(".day-btn").forEach((btn) => btn.classList.remove("active"));
+        dayBtn.classList.add("active");
+        selectedDay = saved.day;
+      }
+      clearSelection();
+      await refreshBlocked();
+      const slotBtn = [...grid.querySelectorAll(".slot.free")].find((btn) => btn.textContent === saved.time);
+      if (slotBtn) pickSlot(slotBtn, saved.time, saved.price);
+    }
+
+    clearSelection();
+    restorePending();
+  </script>
+  <script src="account.js"></script>
+</body>
+</html>

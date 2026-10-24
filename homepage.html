@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orange — Premium Tennis Club</title>
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      padding: 140px 6% 80px;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.05);
+      animation: heroZoom 20s ease-in-out infinite alternate;
+    }
+    @keyframes heroZoom {
+      from { transform: scale(1.05); }
+      to { transform: scale(1.12); }
+    }
+    .hero-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(12,12,12,0.35) 0%,
+        rgba(12,12,12,0.15) 40%,
+        rgba(12,12,12,0.75) 100%
+      );
+    }
+    .hero-bg::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 20%, rgba(255,92,0,0.25) 0%, transparent 55%);
+      z-index: 1;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px 8px 10px;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 999px;
+      color: #fff;
+      font-size: 0.82rem;
+      font-weight: 500;
+      margin-bottom: 28px;
+    }
+    .hero-eyebrow .dot {
+      width: 8px; height: 8px;
+      background: var(--orange);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--orange);
+      animation: blink 2s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 400;
+      line-height: 1.02;
+      color: #fff;
+      max-width: 900px;
+      margin-bottom: 24px;
+      letter-spacing: -0.03em;
+    }
+    .hero h1 em { font-style: italic; color: var(--orange-light); }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: rgba(255,255,255,0.78);
+      max-width: 520px;
+      line-height: 1.65;
+      margin-bottom: 36px;
+      font-weight: 400;
+    }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 56px; }
+
+    .hero-metrics {
+      display: flex;
+      gap: 48px;
+      flex-wrap: wrap;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.15);
+    }
+    .metric strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: 2.4rem;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .metric span {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.55);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 500;
+    }
+
+    .marquee-wrap {
+      background: var(--orange);
+      overflow: hidden;
+      padding: 14px 0;
+    }
+    .marquee {
+      display: flex;
+      gap: 48px;
+      animation: scroll 25s linear infinite;
+      white-space: nowrap;
+    }
+    .marquee span {
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.95);
+    }
+    .marquee span::after { content: " ◆ "; opacity: 0.5; margin-left: 48px; }
+    @keyframes scroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    section { padding: 100px 6%; }
+    .section-head { margin-bottom: 56px; }
+
+    .courts-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+    .court-item {
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      aspect-ratio: 3/4;
+      cursor: pointer;
+      group: court;
+    }
+    .court-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .court-item:hover img { transform: scale(1.08); }
+    .court-item::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 55%);
+    }
+    .court-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 20px;
+      z-index: 2;
+      color: #fff;
+    }
+    .court-info .num {
+      font-family: var(--serif);
+      font-size: 2rem;
+      line-height: 1;
+      opacity: 0.5;
+      margin-bottom: 4px;
+    }
+    .court-info h3 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+    .court-info p { font-size: 0.78rem; opacity: 0.75; }
+    .court-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 2;
+      background: rgba(255,255,255,0.95);
+      color: var(--orange-dark);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border-radius: 999px;
+    }
+
+    .experience {
+      background: var(--surface);
+    }
+    .exp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+    .exp-main {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      min-height: 480px;
+    }
+    .exp-main img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .exp-main .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 36px;
+      color: #fff;
+    }
+    .exp-main h3 {
+      font-family: var(--serif);
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+    .exp-cards {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      gap: 16px;
+    }
+    .exp-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .exp-card:hover {
+      border-color: rgba(255,92,0,0.3);
+      box-shadow: var(--shadow);
+    }
+    .exp-card .icon {
+      width: 48px;
+      height: 48px;
+      background: var(--orange-soft);
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+    }
+    .exp-card h4 { font-size: 1.05rem; font-weight: 600; margin-bottom: 8px; }
+    .exp-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.55; }
+
+    .app-section {
+      background: var(--black);
+      color: #fff;
+      overflow: hidden;
+    }
+    .app-section .section-tag { color: var(--orange-light); }
+    .app-section .section-tag::before { background: var(--orange-light); }
+    .app-section .section-title { color: #fff; }
+    .app-section .section-desc { color: rgba(255,255,255,0.55); }
+
+    .app-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .app-features { list-style: none; }
+    .app-features li {
+      display: flex;
+      gap: 16px;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .app-features li:first-child { padding-top: 0; }
+    .app-features .num {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      color: var(--orange);
+      opacity: 0.8;
+      min-width: 36px;
+    }
+    .app-features h4 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+    .app-features p { font-size: 0.88rem; color: rgba(255,255,255,0.5); line-height: 1.5; }
+
+    .phone-mock {
+      position: relative;
+      justify-self: center;
+    }
+    .phone-frame {
+      width: 280px;
+      background: #1a1a1a;
+      border-radius: 40px;
+      padding: 12px;
+      box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255,255,255,0.1);
+    }
+    .phone-screen {
+      background: var(--surface);
+      border-radius: 32px;
+      overflow: hidden;
+      height: 520px;
+    }
+    .phone-header {
+      background: var(--orange);
+      padding: 28px 20px 20px;
+      color: #fff;
+    }
+    .phone-header small { opacity: 0.8; font-size: 0.72rem; }
+    .phone-header h3 { font-family: var(--serif); font-size: 1.4rem; margin-top: 4px; }
+    .phone-slots {
+      padding: 16px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .phone-slots span {
+      background: var(--orange-soft);
+      color: var(--orange-dark);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 12px 4px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .phone-slots span.on {
+      background: var(--orange);
+      color: #fff;
+    }
+    .phone-glow {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(255,92,0,0.4) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      filter: blur(40px);
+    }
+
+    .pricing { background: var(--surface); }
+    .price-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+    .price-box {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 36px 28px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .price-box:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .price-box.featured {
+      background: var(--black);
+      color: #fff;
+      border-color: var(--black);
+      transform: scale(1.03);
+    }
+    .price-box.featured:hover { transform: scale(1.03) translateY(-4px); }
+    .price-box.featured .price-desc,
+    .price-box.featured li { color: rgba(255,255,255,0.6); }
+    .price-box.featured .amount { color: #fff; }
+    .price-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 8px;
+    }
+    .price-box h3 {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      margin-bottom: 8px;
+    }
+    .price-desc { font-size: 0.88rem; color: var(--muted); margin-bottom: 24px; line-height: 1.5; }
+    .amount {
+      font-family: var(--serif);
+      font-size: 2.8rem;
+      color: var(--text);
+      margin-bottom: 28px;
+    }
+    .amount small { font-size: 1rem; font-family: var(--sans); font-weight: 400; color: var(--muted); }
+    .price-box ul { list-style: none; margin-bottom: 28px; }
+    .price-box li {
+      font-size: 0.88rem;
+      color: var(--muted);
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      padding-left: 24px;
+      position: relative;
+    }
+    .price-box.featured li { border-color: rgba(255,255,255,0.1); }
+    .price-box li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 6px;
+      height: 6px;
+      background: var(--orange);
+      border-radius: 50%;
+    }
+
+    .quote-section {
+      padding: 80px 6%;
+      text-align: center;
+      background: linear-gradient(135deg, var(--orange-soft) 0%, #fff 100%);
+    }
+    .quote-section blockquote {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-style: italic;
+      max-width: 720px;
+      margin: 0 auto 20px;
+      line-height: 1.35;
+      color: var(--text);
+    }
+    .quote-section cite {
+      font-style: normal;
+      font-size: 0.88rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .cta-banner {
+      margin: 0 6% 100px;
+      padding: 64px 48px;
+      background: var(--black);
+      border-radius: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+      flex-wrap: wrap;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-banner::before {
+      content: "";
+      position: absolute;
+      right: -80px;
+      top: -80px;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(255,92,0,0.35) 0%, transparent 70%);
+    }
+    .cta-banner h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      color: #fff;
+      max-width: 480px;
+      position: relative;
+    }
+    .cta-banner h2 em { color: var(--orange-light); font-style: italic; }
+    .cta-actions { display: flex; gap: 12px; flex-wrap: wrap; position: relative; }
+
+    footer {
+      background: var(--charcoal);
+      color: rgba(255,255,255,0.55);
+      padding: 64px 6% 32px;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+    .footer-top h4 { color: #fff; font-size: 0.88rem; font-weight: 600; margin-bottom: 16px; }
+    .footer-top a {
+      display: block;
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      font-size: 0.88rem;
+      margin-bottom: 10px;
+      transition: color 0.2s;
+    }
+    .footer-top a:hover { color: var(--orange-light); }
+    .footer-brand p { margin-top: 16px; font-size: 0.88rem; line-height: 1.6; max-width: 280px; }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 0.8rem;
+    }
+
+
+    @media (max-width: 1100px) {
+      .courts-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .courts-grid { grid-template-columns: repeat(2, 1fr); }
+      .exp-grid, .app-layout, .price-row { grid-template-columns: 1fr; }
+      .price-box.featured { transform: none; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      section { padding: 72px 5%; }
+    }
+    @media (max-width: 600px) {
+      .courts-grid { grid-template-columns: 1fr; }
+      .court-item { aspect-ratio: 16/10; }
+      .hero-metrics { gap: 28px; }
+      .cta-banner { margin: 0 5% 72px; padding: 40px 28px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-strip">Tasarım önizlemesi · <strong>Orange Tennis Club</strong> · Nihai marka onayı sonrası özelleştirilir</div>
+
+  <nav class="nav" id="nav">
+    <a href="homepage.html" class="brand">
+      <div class="brand-mark">O</div>
+      <span class="brand-name">Orange <em>Tennis</em></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#kortlar">Kortlar</a></li>
+      <li><a href="#deneyim">Deneyim</a></li>
+      <li><a href="#uyelik">Üyelik</a></li>
+      <li><a href="booking.html">Rezervasyon</a></li>
+    </ul>
+    <div class="account-nav" id="account-nav">
+      <a href="/login" class="btn btn-outline btn-sm">Giriş</a>
+      <a href="/kayit" class="btn btn-primary btn-sm">Kayıt ol</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-bg">
+      <img src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=1920&q=85" alt="Orange Tennis Club" />
+    </div>
+    <div class="hero-content reveal">
+      <div class="hero-eyebrow"><span class="dot"></span> Eylül 2026 · Açılış yaklaşıyor</div>
+      <h1>Tenisin yeni <em>adresi</em> burada başlıyor</h1>
+      <p class="hero-sub">
+        5 profesyonel kort, elit antrenör kadrosu ve kusursuz dijital deneyim.
+        Kurucu üyelere özel — sınırlı 100 kişilik kontenjan.
+      </p>
+      <div class="hero-actions">
+        <a href="membership.html" class="btn btn-primary">Kurucu Üye Ol →</a>
+        <a href="booking.html" class="btn btn-outline-light">Kort Rezervasyonu</a>
+      </div>
+      <div class="hero-metrics">
+        <div class="metric"><strong>5</strong><span>Profesyonel kort</span></div>
+        <div class="metric"><strong>7/24</strong><span>Online rezervasyon</span></div>
+        <div class="metric"><strong>%20</strong><span>Kurucu indirimi</span></div>
+        <div class="metric"><strong>100</strong><span>Kurucu kontenjan</span></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="marquee-wrap">
+    <div class="marquee">
+      <span>Kurucu üyelik açık</span><span>5 premium kort</span><span>Online rezervasyon</span><span>Profesyonel antrenörler</span><span>Eylül 2026 açılış</span><span>Kurucu üyelik açık</span><span>5 premium kort</span><span>Online rezervasyon</span><span>Profesyonel antrenörler</span><span>Eylül 2026 açılış</span>
+    </div>
+  </div>
+
+  <section id="kortlar">
+    <div class="section-head reveal">
+      <div class="section-tag">Tesisler</div>
+      <h2 class="section-title">Beş kort, <em>sınırsız</em> oyun</h2>
+      <p class="section-desc">Hard ve clay yüzeyler, kapalı ve açık alanlar. Her kort LED aydınlatma ve profesyonel bakım standardında.</p>
+    </div>
+    <div class="courts-grid reveal">
+      <div class="court-item">
+        <img src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&q=80" alt="Kort 1" />
+        <span class="court-badge">Açık</span>
+        <div class="court-info"><div class="num">01</div><h3>Centre Court</h3><p>Hard · LED · Prime time</p></div>
+      </div>
+      <div class="court-item">
+        <img src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&q=80" alt="Kort 2" />
+        <span class="court-badge">Açık</span>
+        <div class="court-info"><div class="num">02</div><h3>Court Two</h3><p>Hard · LED · Gündüz</p></div>
+      </div>
+      <div class="court-item">
+        <img src="https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=800&q=80" alt="Kort 3" />
+        <span class="court-badge">Açık</span>
+        <div class="court-info"><div class="num">03</div><h3>Court Three</h3><p>Hard · Akşam</p></div>
+      </div>
+      <div class="court-item">
+        <img src="https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=800&q=80" alt="Kort 4" />
+        <span class="court-badge">Kapalı</span>
+        <div class="court-info"><div class="num">04</div><h3>Indoor Clay</h3><p>Clay · Klima · Premium</p></div>
+      </div>
+      <div class="court-item">
+        <img src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&q=80" alt="Kort 5" />
+        <span class="court-badge">Kapalı</span>
+        <div class="court-info"><div class="num">05</div><h3>Indoor Clay II</h3><p>Clay · Akademi · Premium</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="experience" id="deneyim">
+    <div class="section-head reveal">
+      <div class="section-tag">Deneyim</div>
+      <h2 class="section-title">Sadece kort <em>değil</em>, yaşam tarzı</h2>
+    </div>
+    <div class="exp-grid reveal">
+      <div class="exp-main">
+        <img src="https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=800&q=80" alt="Orange Tennis Club tesisleri" />
+        <div class="overlay">
+          <h3>Premium tesis deneyimi</h3>
+          <p style="opacity:0.85;font-size:0.95rem;">Soyunma odaları · Pro shop · Lounge · Otopark</p>
+        </div>
+      </div>
+      <div class="exp-cards">
+        <div class="exp-card">
+          <div class="icon">🎾</div>
+          <h4>Profesyonel antrenörler</h4>
+          <p>ITF sertifikalı kadro. Özel ders, grup dersi ve junior akademi programları.</p>
+        </div>
+        <div class="exp-card">
+          <div class="icon">🏆</div>
+          <h4>Turnuva & lig</h4>
+          <p>Aylık turnuvalar, ladder lig sistemi ve sosyal tenis etkinlikleri.</p>
+        </div>
+        <div class="exp-card">
+          <div class="icon">📱</div>
+          <h4>Tam dijital kulüp</h4>
+          <p>Rezervasyon, ödeme, ders takibi — hepsi telefonunuzdan, saniyeler içinde.</p>
+        </div>
+        <div class="exp-card">
+          <div class="icon">☕</div>
+          <h4>Sosyal alan</h4>
+          <p>Maç sonrası dinlenme lounge'u ve üye etkinlikleri.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="app-section">
+    <div class="app-layout">
+      <div class="reveal">
+        <div class="section-tag">Dijital platform</div>
+        <h2 class="section-title">Telefonunuzdan <em>her şey</em></h2>
+        <p class="section-desc" style="margin-bottom:36px;">Açılış gününden itibaren üyeleriniz kort ayırtır, öder ve yönetir — telefon aramaya gerek kalmaz.</p>
+        <ul class="app-features">
+          <li><span class="num">01</span><div><h4>Anlık kort rezervasyonu</h4><p>7/24 müsaitlik, çakışma önleme, anında onay.</p></div></li>
+          <li><span class="num">02</span><div><h4>Güvenli online ödeme</h4><p>Kort kirası ve aidat — iyzico ile tek tıkla.</p></div></li>
+          <li><span class="num">03</span><div><h4>Akıllı hatırlatmalar</h4><p>Push bildirim ve SMS — hiçbir rezervasyonu kaçırmayın.</p></div></li>
+        </ul>
+        <a href="booking.html" class="btn btn-primary" style="margin-top:28px;">Rezervasyon demosu →</a>
+      </div>
+      <div class="phone-mock reveal">
+        <div class="phone-glow"></div>
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <div class="phone-header">
+              <small>Orange Tennis Club</small>
+              <h3>Bugün müsait</h3>
+            </div>
+            <div style="padding:16px;font-size:0.78rem;color:var(--muted);font-weight:600;">Kort 1 · Hard · 90 dk</div>
+            <div class="phone-slots">
+              <span>08:00</span><span>09:30</span><span class="on">17:00</span>
+              <span>18:30</span><span>20:00</span><span style="opacity:0.35">21:30</span>
+            </div>
+            <div style="margin:16px;padding:16px;background:var(--black);border-radius:16px;color:#fff;">
+              <div style="font-size:0.72rem;opacity:0.6;margin-bottom:4px;">TOPLAM</div>
+              <div style="font-family:var(--serif);font-size:1.8rem;">800 ₺</div>
+              <div style="margin-top:12px;background:var(--orange);border-radius:999px;padding:12px;text-align:center;font-weight:600;font-size:0.85rem;">Ödemeye Geç</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pricing" id="uyelik">
+    <div class="section-head reveal">
+      <div class="section-tag">Üyelik</div>
+      <h2 class="section-title">Kurucu üye <em>paketleri</em></h2>
+      <p class="section-desc">Açılıştan önce kayıt olan ilk 100 üyeye özel fiyat. Kontenjan dolduğunda standart fiyatlandırmaya geçilir.</p>
+    </div>
+    <div class="price-row reveal">
+      <div class="price-box">
+        <div class="price-label">Bireysel</div>
+        <h3>Solo</h3>
+        <p class="price-desc">Tek kişilik tam erişim. İdeal bireysel oyuncular için.</p>
+        <div class="amount">2.400<small> ₺/ay</small></div>
+        <ul>
+          <li>Sınırsız kort rezervasyonu</li>
+          <li>Online ödeme</li>
+          <li>Turnuva erken erişim</li>
+        </ul>
+        <a href="membership.html" class="btn btn-outline" style="width:100%">Başvur</a>
+      </div>
+      <div class="price-box featured">
+        <div class="price-label">En popüler</div>
+        <h3>Aile</h3>
+        <p class="price-desc">4 kişiye kadar. Çocuk akademisi dahil.</p>
+        <div class="amount">3.800<small> ₺/ay</small></div>
+        <ul>
+          <li>4 kişilik hesap</li>
+          <li>%15 kort indirimi</li>
+          <li>Junior akademi erişimi</li>
+          <li>Kurucu üye rozeti</li>
+        </ul>
+        <a href="membership.html" class="btn btn-primary" style="width:100%">Başvur</a>
+      </div>
+      <div class="price-box">
+        <div class="price-label">Kurumsal</div>
+        <h3>Business</h3>
+        <p class="price-desc">Şirket anlaşmaları ve sabit kort saatleri.</p>
+        <div class="amount">Teklif<small> alın</small></div>
+        <ul>
+          <li>Toplu üyelik</li>
+          <li>Sabit prime-time slot</li>
+          <li>Fatura & raporlama</li>
+        </ul>
+        <a href="#iletisim" class="btn btn-outline" style="width:100%">İletişim</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="quote-section reveal">
+    <blockquote>"Orange, tenisi sadece oynamak değil — premium bir kulüp deneyimi yaşamak demek."</blockquote>
+    <cite>— Kurucu üye vizyonu</cite>
+  </div>
+
+  <div class="cta-banner reveal" id="iletisim">
+    <h2>Kurucu üye listesine <em>katılın</em></h2>
+    <div class="cta-actions">
+      <a href="membership.html" class="btn btn-primary">Hemen Başvur</a>
+      <a href="booking.html" class="btn btn-outline-light">Rezervasyon demosu</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#" class="brand" style="color:#fff;">
+          <div class="brand-mark">O</div>
+          <span class="brand-name" style="color:#fff;">Orange <em style="color:var(--orange-light)">Tennis</em></span>
+        </a>
+        <p>İstanbul · [Adres]<br />info@orangeclub.com<br />+90 555 000 00 00</p>
+      </div>
+      <div><h4>Kulüp</h4><a href="#kortlar">Kortlar</a><a href="#deneyim">Deneyim</a><a href="#uyelik">Üyelik</a></div>
+      <div><h4>Platform</h4><a href="booking.html">Rezervasyon</a><a href="membership.html">Kurucu üye</a></div>
+      <div><h4>Yasal</h4><a href="#">KVKK</a><a href="#">İptal politikası</a></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Orange Tennis Club</span>
+      <span>Tasarım önizlemesi</span>
+    </div>
+  </footer>
+
+  <script src="account.js"></script>
+  <script>
+    const nav = document.getElementById("nav");
+    window.addEventListener("scroll", () => {
+      nav.classList.toggle("scrolled", window.scrollY > 80);
+    });
+    const reveals = document.querySelectorAll(".reveal");
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("visible"); });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+    document.querySelector(".hero-content").classList.add("visible");
+  </script>
+</body>
+</html>
