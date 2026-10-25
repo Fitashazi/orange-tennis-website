@@ -178,13 +178,64 @@ class Handler(SimpleHTTPRequestHandler):
         return base == "server.py" or base.startswith("data.json")
 
     def origin_ok(self):
-        origin = self.headers.get("Origin")
-        if origin and origin.rstrip("/") != ORIGIN:
+        if not self.source_ok(self.headers.get("Origin"), allow_path=False):
             return False
-        referer = self.headers.get("Referer")
-        if referer and referer != ORIGIN and not referer.startswith(ORIGIN + "/"):
+        if not self.source_ok(self.headers.get("Referer"), allow_path=True):
             return False
         return True
+
+    def source_ok(self, value, allow_path):
+        if not value:
+            return True
+        value = value.strip()
+        if value.rstrip("/") == ORIGIN or (allow_path and value.startswith(ORIGIN + "/")):
+            return True
+        parsed = urlparse(value)
+        if parsed.scheme not in ("http", "https") or parsed.username or parsed.password:
+            return False
+        try:
+            explicit_port = parsed.port
+        except ValueError:
+            return False
+        if not parsed.hostname:
+            return False
+        if not allow_path and (parsed.path not in ("", "/") or parsed.query or parsed.fragment):
+            return False
+        default_port = 443 if parsed.scheme == "https" else 80
+        return self.host_matches(parsed.hostname, explicit_port or default_port)
+
+    def host_matches(self, hostname, port):
+        raw = (self.headers.get("Host") or "").strip()
+        if not raw:
+            return False
+        host, host_port = self.split_host(raw)
+        if not host or host.rstrip(".") != hostname.lower().rstrip("."):
+            return False
+        if host_port is None:
+            return port in (80, 443)
+        return host_port == port
+
+    def split_host(self, value):
+        value = value.strip().lower()
+        if value.startswith("["):
+            end = value.find("]")
+            if end == -1:
+                return None, None
+            host = value[1:end]
+            rest = value[end + 1:]
+            if rest == "":
+                return host, None
+            if rest.startswith(":") and rest[1:].isdigit() and int(rest[1:]) <= 65535:
+                return host, int(rest[1:])
+            return None, None
+        if value.count(":") > 1:
+            return None, None
+        if ":" in value:
+            host, port_text = value.rsplit(":", 1)
+            if not host or not port_text.isdigit() or int(port_text) > 65535:
+                return None, None
+            return host, int(port_text)
+        return value, None
 
     def session_token(self):
         raw = self.headers.get("Cookie") or ""
@@ -278,6 +329,8 @@ class Handler(SimpleHTTPRequestHandler):
         path = self.clean_path()
         if self.is_private(path):
             return self.send_json(404, {"error": "Bulunamadı."})
+        if path == "/":
+            return self.redirect("/homepage.html")
         if path.startswith("/api/") and not self.origin_ok():
             return self.send_json(403, {"error": "Kaynak reddedildi."})
         if path == "/api/availability":
